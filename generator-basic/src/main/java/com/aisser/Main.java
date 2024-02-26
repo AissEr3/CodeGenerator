@@ -1,5 +1,6 @@
 package com.aisser;
 
+import com.aisser.cli.CommandExecutor;
 import com.aisser.generator.StaticGenerator;
 
 import java.io.File;
@@ -10,6 +11,10 @@ import java.io.File;
  */
 public class Main {
     public static void main(String[] args) {
-
+//        args = "generate -l true -a aisser -s".split(" ");
+//        args = "list".split(" ");
+        args = "config".split(" ");
+        CommandExecutor commandExecutor = new CommandExecutor();
+        commandExecutor.doExecute(args);
     }
 }

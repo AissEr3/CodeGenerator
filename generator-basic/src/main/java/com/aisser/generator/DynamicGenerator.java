@@ -23,10 +23,10 @@ public class DynamicGenerator {
         data.setLoop(true);
         data.setOutputText("sum is ");
         data.setAuthor("AissEr");
-        doGenerator(inputPath,outputPath,data);
+        doGenerate(inputPath,outputPath,data);
     }
 
-    public static void doGenerator(String inputPath, String outputPath, Object data) throws IOException, TemplateException {
+    public static void doGenerate(String inputPath, String outputPath, Object data) throws IOException, TemplateException {
         // 1. 配置基本信息，指定要替换的文件夹
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_32);
         File templateDir = new File(inputPath).getParentFile();

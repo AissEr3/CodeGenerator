@@ -22,4 +22,5 @@ public class MainTemplateConfig {
      * 输出内容
      */
     private String outputText = "Sum = ";
+
 }
