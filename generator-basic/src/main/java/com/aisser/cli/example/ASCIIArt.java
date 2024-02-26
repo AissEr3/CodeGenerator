@@ -4,7 +4,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-import java.util.concurrent.Callable;
 
 // |2| 使用Command注解设置命令名称，版本号，指定是否有注释选项
 @Command(name = "ASCIIArt", version = "ASCIIArt 1.0", mixinStandardHelpOptions = true)
@@ -12,7 +11,7 @@ public class ASCIIArt implements Runnable { // |1| 必须实现Runnable或Collab
 
     // |3| 注解将字段设置为命令选项，可以给选项设置名称和描述
     @Option(names = { "-s", "--font-size" }, description = "Font size")
-    int fontSize = 14;
+    int fontSize;
 
     // |4| 注解将字段设置为命令行参数，可以指定默认值、描述等信息
     @Parameters(paramLabel = "<word>", defaultValue = "Hello, picocli",
