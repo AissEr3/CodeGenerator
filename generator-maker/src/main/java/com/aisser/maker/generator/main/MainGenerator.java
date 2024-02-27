@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import com.aisser.maker.generator.JarGenerator;
+import com.aisser.maker.generator.ScriptGenerator;
 import com.aisser.maker.generator.file.DynamicFileGenerator;
 import com.aisser.maker.meta.Meta;
 import com.aisser.maker.meta.MetaManger;
@@ -88,5 +89,9 @@ public class MainGenerator {
         DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
 
         JarGenerator.doGenerator("C:\\D_commonFiles\\java_project\\CodeGenerator\\generator-maker\\generated\\acm-template-pro-generator");
+
+        String jarName = String.format("%s-%s-jar-with-dependencies.jar",meta.getName(),meta.getVersion());
+        String jarPath = "target/" + jarName;
+        ScriptGenerator.doGenerator(outputPath+"/generator.bat",jarPath);
     }
 }
