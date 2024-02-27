@@ -1,6 +1,7 @@
 package com.aisser.maker;
 
-import com.aisser.maker.cli.CommandExecutor;
+import com.aisser.maker.meta.Meta;
+import com.aisser.maker.meta.MetaManger;
 
 /**
  * @author AissEr
@@ -8,7 +9,9 @@ import com.aisser.maker.cli.CommandExecutor;
  */
 public class Main {
     public static void main(String[] args) {
-        CommandExecutor commandExecutor = new CommandExecutor();
-        commandExecutor.doExecute(args);
+//        CommandExecutor commandExecutor = new CommandExecutor();
+//        commandExecutor.doExecute(args);
+        Meta metaInstance = MetaManger.getMetaInstance();
+        System.out.println(metaInstance);
     }
 }
