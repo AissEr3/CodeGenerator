@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 package ${basePackage}.generator;
 
 import ${basePackage}.model.DataModel;
+=======
+package templates.java.generator;
+
+{basePackage}.generator;
+
+import com.yupi.model.DataModel;
+>>>>>>> origin/main
 import freemarker.template.TemplateException;
 
 import java.io.File;
@@ -29,9 +37,15 @@ public class MainGenerator {
         inputPath = new File(inputRootPath,"${fileInfo.inputPath}").getAbsolutePath();
         outputPath = new File(outputRootPath, "${fileInfo.outputPath}").getAbsolutePath();
         <#if fileInfo.generateType == "static">
+<<<<<<< HEAD
         StaticGenerator.copyFilesByHutool(inputPath,outputPath);
         <#else>
         DynamicGenerator.doGenerate(inputPath, outputPath, model);
+=======
+            StaticGenerator.copyFilesByHutool(inputPath,outputPath)
+        <#else>
+            DynamicGenerator.doGenerate(inputPath, outputPath, model);
+>>>>>>> origin/main
         </#if>
     </#list>
     }

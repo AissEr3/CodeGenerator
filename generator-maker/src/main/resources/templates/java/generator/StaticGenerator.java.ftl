@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 package ${basePackage}.generator;
 
+=======
+package templates.java.generator;
+
+{basePackage}.generator;
+>>>>>>> origin/main
 
 import cn.hutool.core.io.FileUtil;
 

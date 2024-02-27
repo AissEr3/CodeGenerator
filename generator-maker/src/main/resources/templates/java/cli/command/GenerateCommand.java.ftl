@@ -1,7 +1,11 @@
 package ${basePackage}.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
+<<<<<<< HEAD
 import ${basePackage}.generator.MainGenerator;
+=======
+import ${basePackage}.generator.file.FileGenerator;
+>>>>>>> origin/main
 import ${basePackage}.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;
@@ -31,7 +35,11 @@ public class GenerateCommand implements Callable<Integer> {
         DataModel mainTemplateConfig = new DataModel();
         BeanUtil.copyProperties(this,mainTemplateConfig);
         System.out.println("配置信息：" + mainTemplateConfig);
+<<<<<<< HEAD
         MainGenerator.doGenerate(mainTemplateConfig);
+=======
+        FileGenerator.doGenerate(mainTemplateConfig);
+>>>>>>> origin/main
 
         return 0;
     }
