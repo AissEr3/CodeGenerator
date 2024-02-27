@@ -1,15 +1,15 @@
-package com.aisser.maker.cli.command;
+package ${basePackage}.cli.command;
 
 import cn.hutool.core.util.ReflectUtil;
-import com.aisser.maker.model.DataModel;
+import ${basePackage}.model.DataModel;
 import picocli.CommandLine.Command;
 
 import java.lang.reflect.Field;
 
 /**
- * @author AissEr
- * @created by AissEr on 2024/2/26-16:12
- */
+* @author ${author}
+* @created by ${author}
+*/
 @Command(name = "config",description = "查看参数信息",mixinStandardHelpOptions = true)
 public class ConfigCommand implements Runnable{
 

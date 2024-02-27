@@ -6,7 +6,7 @@
   "author": "AissEr",
   "createTime": "2024-2-27",
   "fileConfig": {
-    "inputRootPath": ".source/acm-template-pro",
+    "inputRootPath": "C:/D_commonFiles/java_project/CodeGenerator/generator-demo-project/acm-template-pro",
     "outputRootPath": "generated",
     "sourceRootPath": "",
     "type": "dir",

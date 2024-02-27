@@ -1,16 +1,16 @@
-package com.aisser.maker.cli;
+package ${basePackage}.cli;
 
-import com.aisser.maker.cli.command.ConfigCommand;
-import com.aisser.maker.cli.command.GenerateCommand;
-import com.aisser.maker.cli.command.ListCommand;
+import ${basePackage}.cli.command.ConfigCommand;
+import ${basePackage}.cli.command.GenerateCommand;
+import ${basePackage}.cli.command.ListCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 /**
- * @author AissEr
- * @created by AissEr on 2024/2/26-15:42
- */
-@Command(name = "aisser", mixinStandardHelpOptions = true)
+* @author ${author}
+* @created by ${author}
+*/
+@Command(name = "${name}", mixinStandardHelpOptions = true)
 public class CommandExecutor implements Runnable{
     private final CommandLine commandLine;
 
