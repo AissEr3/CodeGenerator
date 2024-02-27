@@ -1,11 +1,8 @@
 package ${basePackage}.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
-<<<<<<< HEAD
 import ${basePackage}.generator.MainGenerator;
-=======
-import ${basePackage}.generator.file.FileGenerator;
->>>>>>> origin/main
+import ${basePackage}.generator.FileGenerator;
 import ${basePackage}.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;

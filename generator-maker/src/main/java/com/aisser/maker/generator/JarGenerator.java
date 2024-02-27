@@ -32,8 +32,4 @@ public class JarGenerator {
         System.out.println("退出码："+exitCode);
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        doGenerator("C:\\D_commonFiles\\java_project\\CodeGenerator\\generator-maker\\generated\\acm-template-pro-generator");
-    }
-
 }
