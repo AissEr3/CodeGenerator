@@ -33,7 +33,6 @@ public class ScriptGenerator {
 
 
         // Windows
-        builder = new StringBuilder();
         String windowsPrefix = "@echo off";
         String windowsSuffix = "%*";
 
@@ -44,11 +43,11 @@ public class ScriptGenerator {
         FileUtil.writeBytes(builder.toString().getBytes(StandardCharsets.UTF_8),outputPath);
 
 //         Linux需要添加权限
-        try{
-            Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
-            Files.setPosixFilePermissions(Paths.get(outputPath),permissions);
-        }catch(Exception e){
-
-        }
+//        try{
+//            Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
+//            Files.setPosixFilePermissions(Paths.get(outputPath),permissions);
+//        }catch(Exception e){
+//
+//        }
     }
 }

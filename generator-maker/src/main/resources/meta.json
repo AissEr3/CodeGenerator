@@ -9,7 +9,7 @@
   "fileConfig": {
     "inputRootPath": "C:/D_commonFiles/java_project/CodeGenerator/generator-demo-project/acm-template-pro",
     "outputRootPath": "generated",
-    "sourceRootPath": "",
+    "sourceRootPath": "C:/D_commonFiles/java_project/CodeGenerator/generator-demo-project/acm-template-pro",
     "type": "dir",
     "files": [
       {

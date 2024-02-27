@@ -26,6 +26,10 @@ public class MainGenerator {
         String projectPath = System.getProperty("user.dir");
         String outputPath = projectPath + File.separator + "generated" + File.separator + meta.getName();
 
+        String sourceRootPath = meta.getFileConfig().getSourceRootPath();
+        String sourceCopyDestPath = outputPath + File.separator + ".source";
+        FileUtil.copy(sourceRootPath,sourceCopyDestPath,false);
+
         // 3. 读取resource目录
         ClassPathResource classPathResource = new ClassPathResource("");
         String inputResourcePath = classPathResource.getAbsolutePath();
