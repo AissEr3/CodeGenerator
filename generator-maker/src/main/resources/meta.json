@@ -2,6 +2,7 @@
   "name": "acm-template-pro-generator",
   "description": "ACM 示例模板生成器",
   "basePackage": "com.aisser.maker",
+  "groupId": "com.aisser",
   "version": "1.0",
   "author": "AissEr",
   "createTime": "2024-2-27",
