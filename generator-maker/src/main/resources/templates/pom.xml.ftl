@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.aisser</groupId>
-    <artifactId>generator-basic</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>${groupId}</groupId>
+    <artifactId>${name}</artifactId>
+    <version>${version}</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -66,7 +66,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.aisser.Main</mainClass>
+                            <mainClass>${basePackage}.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

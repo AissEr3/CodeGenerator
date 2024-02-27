@@ -1,6 +1,5 @@
 package com.aisser.maker.generator.main;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import com.aisser.maker.generator.file.DynamicFileGenerator;
@@ -37,8 +36,54 @@ public class MainGenerator {
         String outputFilePath;
 
         // 生成指定文件信息
+        // DataModel.java
         inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/model/DataModel.java.ftl".split("/"));
         outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/model/DataModel.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // GenerateCommand.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/cli/command/GenerateCommand.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/cli/command/GenerateCommand.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // ListCommand.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/cli/command/ListCommand.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/cli/command/ListCommand.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // ConfigCommand.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/cli/command/ConfigCommand.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/cli/command/ConfigCommand.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // Main.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/Main.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/Main.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // DynamicGenerator.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/generator/DynamicGenerator.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/generator/DynamicGenerator.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // MainGenerator.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/generator/MainGenerator.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/generator/MainGenerator.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // StaticGenerator.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/generator/StaticGenerator.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/generator/StaticGenerator.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // CommandExecutor.java.ftl
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/java/cli/CommandExecutor.java.ftl".split("/"));
+        outputFilePath = outputBaseJavaPackagePath + StrUtil.join(File.separator,"/cli/CommandExecutor.java".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
+        // StaticGenerator.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/pom.xml.ftl".split("/"));
+        outputFilePath = outputPath + File.separator + "pom.xml";
         DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
     }
 }

@@ -17,6 +17,7 @@ public class Meta {
     private String name;
     private String description;
     private String basePackage;
+    private String groupId;
     private String version;
     private String author;
     private String createTime;
