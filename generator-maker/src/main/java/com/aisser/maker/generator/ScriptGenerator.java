@@ -3,12 +3,6 @@ package com.aisser.maker.generator;
 import cn.hutool.core.io.FileUtil;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Set;
 
 /**
  * @author AissEr
@@ -21,18 +15,18 @@ public class ScriptGenerator {
      * @param outputPath
      * @param jarPath
      */
-    public static void doGenerator(String outputPath, String jarPath){
+    public static void doGenerate(String outputPath, String jarPath){
         StringBuilder builder = new StringBuilder();
         // Linux
-//        String linuxPrefix = "#!/bin/bash";
-//        String linuxSuffix = "\"$@\"";
-//        builder.append(linuxPrefix).append("\n");
-//        builder.append(String.format("java -jar %s ",jarPath));
-//        builder.append(linuxSuffix).append("\n");
-//        FileUtil.writeBytes(builder.toString().getBytes(StandardCharsets.UTF_8),outputPath);
-
+        String linuxPrefix = "#!/bin/bash";
+        String linuxSuffix = "\"$@\"";
+        builder.append(linuxPrefix).append("\n");
+        builder.append(String.format("java -jar %s ",jarPath));
+        builder.append(linuxSuffix).append("\n");
+        FileUtil.writeBytes(builder.toString().getBytes(StandardCharsets.UTF_8),outputPath);
 
         // Windows
+        builder = new StringBuilder();
         String windowsPrefix = "@echo off";
         String windowsSuffix = "%*";
 
@@ -40,7 +34,7 @@ public class ScriptGenerator {
         builder.append(String.format("java -jar %s ",jarPath));
         builder.append(windowsSuffix).append("\n");
 
-        FileUtil.writeBytes(builder.toString().getBytes(StandardCharsets.UTF_8),outputPath);
+        FileUtil.writeBytes(builder.toString().getBytes(StandardCharsets.UTF_8),outputPath+".bat");
 
 //         Linux需要添加权限
 //        try{

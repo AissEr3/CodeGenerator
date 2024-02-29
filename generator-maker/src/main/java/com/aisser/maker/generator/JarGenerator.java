@@ -8,7 +8,7 @@ import java.io.*;
  */
 public class JarGenerator {
 
-    public static void doGenerator(String projectDir) throws IOException, InterruptedException {
+    public static void doGenerate(String projectDir) throws IOException, InterruptedException {
         // windows的clean命令
         String winMavenCommand = "mvn.cmd clean package -DskipTests=true";
         // 其它操作系统的clean命令

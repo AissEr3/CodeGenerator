@@ -1,4 +1,4 @@
-package com.yupi.maker.meta;
+package com.aisser.maker.meta;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
