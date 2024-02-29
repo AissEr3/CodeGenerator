@@ -92,10 +92,30 @@ public class MainGenerator {
         outputFilePath = outputPath + StrUtil.join(File.separator,"/pom.xml".split("/"));
         DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
 
+        // pom.java
+        inputFilePath = inputResourcePath + StrUtil.join(File.separator,"templates/README.md.ftl".split("/"));
+        outputFilePath = outputPath + StrUtil.join(File.separator,"/README.md".split("/"));
+        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+
         JarGenerator.doGenerator("C:\\D_commonFiles\\java_project\\CodeGenerator\\generator-maker\\generated\\acm-template-pro-generator");
 
+        // 封装脚本
         String jarName = String.format("%s-%s-jar-with-dependencies.jar",meta.getName(),meta.getVersion());
         String jarPath = "target/" + jarName;
         ScriptGenerator.doGenerator(outputPath+"/generator.bat",jarPath);
+
+        // 生成精简版程序
+        String shellOutputPath = outputPath + File.separator + "generator.bat";
+        String distOutputPath = outputPath + "-dist";
+        String targetAbsolutePath  = distOutputPath + File.separator + "target";
+        FileUtil.mkdir(targetAbsolutePath);
+        String jarAbsolutePath = outputPath + File.separator + jarPath;
+
+        // 复制jar包
+        FileUtil.copy(jarAbsolutePath,targetAbsolutePath,true);
+        // 复制脚本文件
+        FileUtil.copy(shellOutputPath,distOutputPath,true);
+        FileUtil.copy(sourceCopyDestPath,distOutputPath,true);
+
     }
 }
