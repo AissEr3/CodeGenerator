@@ -21,7 +21,7 @@ public class GenerateCommand implements Callable<Integer> {
     /**
     * ${modelInfo.description}
     */
-    @Option(names = {<#if modelInfo.abbr??>"-${modelInfo.abbr}"</#if>, "--${modelInfo.fieldName}"}, <#if modelInfo.description??>description = "${modelInfo.description}"</#if>, arity = "0..1", interactive = true, echo = true)
+    @Option(names = {<#if modelInfo.abbr??>"-${modelInfo.abbr}", </#if>"--${modelInfo.fieldName}"}, <#if modelInfo.description??>description = "${modelInfo.description}"</#if>, arity = "0..1", interactive = true, echo = true)
     private ${modelInfo.type} ${modelInfo.fieldName};
 
 </#list>

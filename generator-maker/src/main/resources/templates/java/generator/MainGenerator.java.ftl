@@ -11,6 +11,16 @@ import java.io.IOException;
  */
 public class MainGenerator {
 
+<#macro generateFile fileInfo indent>
+    ${indent}inputPath = new File(inputRootPath,"${fileInfo.inputPath}").getAbsolutePath();
+    ${indent}outputPath = new File(outputRootPath, "${fileInfo.outputPath}").getAbsolutePath();
+    <#if fileInfo.generateType == "static">
+    ${indent}StaticGenerator.copyFilesByHutool(inputPath,outputPath);
+    <#else>
+    ${indent}DynamicGenerator.doGenerate(inputPath, outputPath, model);
+    </#if>
+</#macro>
+
     /**
      * 生成
      *
@@ -25,14 +35,37 @@ public class MainGenerator {
         String inputPath;
         String outputPath;
 
-    <#list fileConfig.files as fileInfo>
-        inputPath = new File(inputRootPath,"${fileInfo.inputPath}").getAbsolutePath();
-        outputPath = new File(outputRootPath, "${fileInfo.outputPath}").getAbsolutePath();
-        <#if fileInfo.generateType == "static">
-        StaticGenerator.copyFilesByHutool(inputPath,outputPath);
+    <#list modelConfig.models as modelInfo>
+        <#-- 有分组 -->
+        <#if modelInfo.groupKey??>
+            <#list modelInfo.models as subModelInfo>
+                ${subModelInfo.type} ${subModelInfo.fieldName} = model.${modelInfo.groupKey}.${subModelInfo.fieldName};
+            </#list>
         <#else>
-        DynamicGenerator.doGenerate(inputPath, outputPath, model);
+            ${modelInfo.type} ${modelInfo.fieldName} = model.${modelInfo.fieldName};
         </#if>
     </#list>
+
+<#list fileConfig.files as fileInfo>
+    <#if fileInfo.groupKey??>
+        <#if fileInfo.condition??>
+            if(${fileInfo.condition}){
+                <#list fileInfo.files as fileInfo>
+                <@generateFile fileInfo=fileInfo indent="        "></@generateFile>
+                </#list>
+            }
+        <#else >
+        <@generateFile fileInfo=fileInfo indent=""></@generateFile>
+        </#if>
+    <#else>
+        <#if fileInfo.condition??>
+            if(${fileInfo.condition}){
+            <@generateFile fileInfo=fileInfo indent="      "></@generateFile>
+            }
+        <#else >
+        <@generateFile fileInfo=fileInfo indent="       "></@generateFile>
+        </#if>
+    </#if>
+</#list>
     }
 }
