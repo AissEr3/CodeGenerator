@@ -3,8 +3,8 @@ package com.aisser.acm;
 import java.util.Scanner;
 
 /**
- * @author ${author}
- * @created by ${author}
+ * @author ${mainTemplate.author}
+ * @created by ${mainTemplate.author}
  */
 public class MainTemplate {
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class MainTemplate {
                 sum += num;
             }
 
-            System.out.println("${outputText}" + sum);
+            System.out.println("${mainTemplate.outputText}" + sum);
 <#if loop>
         }
 </#if>
