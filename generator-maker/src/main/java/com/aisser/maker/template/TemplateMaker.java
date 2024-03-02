@@ -10,10 +10,15 @@ import cn.hutool.json.JSONUtil;
 import com.aisser.maker.meta.Meta;
 import com.aisser.maker.meta.emuns.FileGenerateTypeEnum;
 import com.aisser.maker.meta.emuns.FileTypeEnum;
+import com.aisser.maker.template.enums.FileFilterRangeEnum;
+import com.aisser.maker.template.enums.FileFilterRuleEnum;
+import com.aisser.maker.template.model.FileFilterConfig;
+import com.aisser.maker.template.model.TemplateMakerFileConfig;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +28,12 @@ import java.util.stream.Collectors;
  */
 public class TemplateMaker {
 
-    private static Long makeTemplate(Meta newMeta ,String originProjectPath, List<String> inputFilePathList, Meta.ModelConfig.ModelInfo modelInfo, String searchStr, Long id){
+    private static Long makeTemplate(Meta newMeta ,
+                                     String originProjectPath,
+                                     TemplateMakerFileConfig templateMakerFileConfigList,
+                                     Meta.ModelConfig.ModelInfo modelInfo,
+                                     String searchStr,
+                                     Long id){
         if(id == null){
             id = IdUtil.getSnowflakeNextId();
         }
@@ -42,20 +52,21 @@ public class TemplateMaker {
         String sourceRootPath = templatePath + File.separator + FileUtil.getLastPathEle(Paths.get(originProjectPath)).toString();
 
         // 二、生成文件模板
+        List<TemplateMakerFileConfig.FileInfoConfig> fileInfoConfigList = templateMakerFileConfigList.getFiles();
         List<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>();
-        for (String inputFilePath : inputFilePathList) {
-            String inputFileAbsolutePath = sourceRootPath + File.separator + inputFilePath;
-            // 输入文件为目录
-            if(FileUtil.isDirectory(inputFileAbsolutePath)){
-                List<File> fileList = FileUtil.loopFiles(inputFileAbsolutePath);
-                for (File file : fileList) {
-                    Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, file);
-                    newFileInfoList.add(fileInfo);
-                }
-            }else{
-                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, new File(inputFileAbsolutePath));
+        for (TemplateMakerFileConfig.FileInfoConfig fileInfoConfig : fileInfoConfigList) {
+            String inputFilePath = fileInfoConfig.getPath();
+
+            // 如果是相对路径，将其转换为绝对路径
+            if(!inputFilePath.startsWith(sourceRootPath)){
+                inputFilePath = sourceRootPath + File.separator + inputFilePath;
+            }
+            List<File> files = FileFilter.doFilter(inputFilePath, fileInfoConfig.getFilterConfigs());
+            for (File file : files) {
+                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, file);
                 newFileInfoList.add(fileInfo);
             }
+
         }
 
         // 三、生成配置文件
@@ -160,10 +171,22 @@ public class TemplateMaker {
 
         String projectPath = System.getProperty("user.dir");
         String originProjectPath = new File(projectPath).getParent() + File.separator + "generator-demo-project/springboot-init";
-        List<String> inputFilePaths = new ArrayList<>();
-        inputFilePaths.add("src/main/java/com/aisser/springbootinit/common");
-        inputFilePaths.add("src/main/java/com/aisser/springbootinit/controller");
 
+        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig1 = new TemplateMakerFileConfig.FileInfoConfig();
+        List<FileFilterConfig> fileFilterConfigList = new ArrayList<>();
+        fileFilterConfigList.add(FileFilterConfig.builder()
+                .range(FileFilterRangeEnum.FILE_NAME.getValue())
+                .rule(FileFilterRuleEnum.CONTAINS.getValue())
+                .value("Base")
+                .build());
+        fileInfoConfig1.setPath("src/main/java/com/aisser/springbootinit/common");
+        fileInfoConfig1.setFilterConfigs(fileFilterConfigList);
+
+        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig2 = new TemplateMakerFileConfig.FileInfoConfig();
+        fileInfoConfig2.setPath("src/main/java/com/aisser/springbootinit/controller");
+
+        TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
+        templateMakerFileConfig.setFiles(Arrays.asList(fileInfoConfig1,fileInfoConfig2));
 
         Meta.ModelConfig.ModelInfo modelInfo = new Meta.ModelConfig.ModelInfo();
         modelInfo.setFieldName("className");
@@ -171,7 +194,7 @@ public class TemplateMaker {
 
         String searchStr = "BaseResponse";
 
-        Long id = makeTemplate(meta,originProjectPath,inputFilePaths,modelInfo,searchStr,null);
+        Long id = makeTemplate(meta,originProjectPath,templateMakerFileConfig,modelInfo,searchStr,null);
         System.out.println(id);
 
     }
