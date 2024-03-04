@@ -3,6 +3,7 @@ package com.aisser.maker.template;
 import com.aisser.maker.meta.Meta;
 import com.aisser.maker.template.model.TemplateMakerFileConfig;
 import com.aisser.maker.template.model.TemplateMakerModelConfig;
+import com.aisser.maker.template.model.TemplateMakerOutputConfig;
 import lombok.Data;
 
 /**
@@ -20,4 +21,6 @@ public class TemplateMakerConfig {
     private TemplateMakerFileConfig fileConfig = new TemplateMakerFileConfig();
 
     private TemplateMakerModelConfig modelConfig = new TemplateMakerModelConfig();
+
+    private TemplateMakerOutputConfig outputConfig = new TemplateMakerOutputConfig();
 }
