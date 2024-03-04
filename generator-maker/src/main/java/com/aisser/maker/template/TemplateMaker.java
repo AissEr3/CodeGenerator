@@ -13,6 +13,7 @@ import com.aisser.maker.meta.emuns.FileGenerateTypeEnum;
 import com.aisser.maker.meta.emuns.FileTypeEnum;
 import com.aisser.maker.template.model.TemplateMakerFileConfig;
 import com.aisser.maker.template.model.TemplateMakerModelConfig;
+import com.aisser.maker.template.model.TemplateMakerOutputConfig;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -30,15 +31,17 @@ public class TemplateMaker {
         String originProjectPath = templateMakerConfig.getOriginProjectPath();
         TemplateMakerFileConfig fileConfig = templateMakerConfig.getFileConfig();
         TemplateMakerModelConfig modelConfig = templateMakerConfig.getModelConfig();
+        TemplateMakerOutputConfig outputConfig = templateMakerConfig.getOutputConfig();
         Long id = templateMakerConfig.getId();
 
-        return makeTemplate(newMeta, originProjectPath, fileConfig, modelConfig, id);
+        return makeTemplate(newMeta, originProjectPath, fileConfig, modelConfig,outputConfig, id);
     }
 
     public static Long makeTemplate(Meta newMeta ,
                                      String originProjectPath,
                                      TemplateMakerFileConfig templateMakerFileConfig,
                                      TemplateMakerModelConfig templateMakerModelConfig,
+                                     TemplateMakerOutputConfig templateMakerOutputConfig,
                                      Long id){
         if(id == null){
             id = IdUtil.getSnowflakeNextId();
@@ -55,7 +58,13 @@ public class TemplateMaker {
 
         // 一、输入信息
         // 1.输入项目基本信息
-        String sourceRootPath = templatePath + File.separator + FileUtil.getLastPathEle(Paths.get(originProjectPath)).toString();
+        String sourceRootPath = FileUtil.loopFiles(new File(templatePath),1,null)
+                .stream()
+                .filter(File::isDirectory)
+                .findFirst()
+                .orElseThrow(RuntimeException::new)
+                .getAbsolutePath();
+
         sourceRootPath = sourceRootPath.replaceAll("\\\\","/");
 
         // 二、生成文件模板
@@ -245,7 +254,7 @@ public class TemplateMaker {
                 inputFilePath = sourceRootPath + File.separator + inputFilePath;
             }
 
-            List<File> files = FileFilter.doFilter(inputFilePath, fileInfoConfig.getFilterConfigs());
+            List<File> files = FileFilter.doFilter(inputFilePath, fileInfoConfig.getFilterConfigList());
             files = files.stream()
                     .filter(file -> !file.getAbsolutePath().endsWith(".ftl"))
                     .collect(Collectors.toList());
