@@ -22,7 +22,7 @@ public class TemplateMakerFileConfig {
     public static class FileInfoConfig{
         private String path;
 
-        private List<FileFilterConfig> filterConfigs;
+        private List<FileFilterConfig> filterConfigList;
     }
 
     @Data
