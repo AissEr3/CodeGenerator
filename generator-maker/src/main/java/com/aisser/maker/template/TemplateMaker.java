@@ -29,6 +29,16 @@ import java.util.stream.Collectors;
  */
 public class TemplateMaker {
 
+    public static Long makeTemplate(TemplateMakerConfig templateMakerConfig){
+        Meta newMeta = templateMakerConfig.getMeta();
+        String originProjectPath = templateMakerConfig.getOriginProjectPath();
+        TemplateMakerFileConfig fileConfig = templateMakerConfig.getFileConfig();
+        TemplateMakerModelConfig modelConfig = templateMakerConfig.getModelConfig();
+        Long id = templateMakerConfig.getId();
+
+        return makeTemplate(newMeta, originProjectPath, fileConfig, modelConfig, id);
+    }
+
     public static Long makeTemplate(Meta newMeta ,
                                      String originProjectPath,
                                      TemplateMakerFileConfig templateMakerFileConfig,

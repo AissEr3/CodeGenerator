@@ -1,0 +1,31 @@
+{
+  "meta":{
+    "name": "acm-template-pro-generator",
+    "description": "ACM 示例模板生成器"
+  },
+  "originProjectPath": "../../../generator-demo-project/springboot-init",
+  "fileConfig":{
+    "files": [
+      {
+        "path": "src/main/java/com/aisser/springbootinit/common",
+        "filterConfigs": [
+          {
+            "range": "fileName",
+            "rule": "startsWith",
+            "value": "Base"
+          }
+        ]
+      }
+    ]
+  },
+  "modelConfig": {
+    "models": [
+      {
+        "fileName": "className",
+        "type": "String",
+        "defaultValue": true,
+        "replaceText": "BaseResponse"
+      }
+    ]
+  }
+}

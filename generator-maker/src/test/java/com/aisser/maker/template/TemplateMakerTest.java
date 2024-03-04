@@ -1,5 +1,7 @@
 package com.aisser.maker.template;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.json.JSONUtil;
 import com.aisser.maker.meta.Meta;
 import com.aisser.maker.template.enums.FileFilterRangeEnum;
 import com.aisser.maker.template.enums.FileFilterRuleEnum;
@@ -103,6 +105,14 @@ public class TemplateMakerTest {
         templateMakerModelConfig.setModels(Arrays.asList(modelInfoConfig));
 
         Long id = TemplateMaker.makeTemplate(meta,originProjectPath,templateMakerFileConfig,templateMakerModelConfig,1764276837696102400L);
+        System.out.println(id);
+    }
+
+    @Test
+    public void testMakeTemplateByJsonFile(){
+        String templateMakerJsonPath = "templateMaker.json";
+        TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(FileUtil.readUtf8String(templateMakerJsonPath), TemplateMakerConfig.class);
+        Long id = TemplateMaker.makeTemplate(templateMakerConfig);
         System.out.println(id);
     }
 
