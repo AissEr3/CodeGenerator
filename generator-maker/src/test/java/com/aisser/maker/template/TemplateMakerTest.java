@@ -88,7 +88,7 @@ public class TemplateMakerTest {
 
         TemplateMakerFileConfig.FileInfoConfig fileInfoConfig2 = new TemplateMakerFileConfig.FileInfoConfig();
         fileInfoConfig2.setPath("./");
-        fileInfoConfig2.setFilterConfigs(Arrays.asList(FileFilterConfig.builder()
+        fileInfoConfig2.setFilterConfigList(Arrays.asList(FileFilterConfig.builder()
                 .range(FileFilterRangeEnum.FILE_CONTENT.getValue())
                 .rule(FileFilterRuleEnum.CONTAINS.getValue())
                 .value("BaseResponse")
@@ -123,6 +123,14 @@ public class TemplateMakerTest {
         String configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker.json");
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(configStr,TemplateMakerConfig.class);
         Long id = TemplateMaker.makeTemplate(templateMakerConfig);
+
+        configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker1.json");
+        templateMakerConfig = JSONUtil.toBean(configStr,TemplateMakerConfig.class);
+        id = TemplateMaker.makeTemplate(templateMakerConfig);
+
+        configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker2.json");
+        templateMakerConfig = JSONUtil.toBean(configStr,TemplateMakerConfig.class);
+        id = TemplateMaker.makeTemplate(templateMakerConfig);
         System.out.println(id);
     }
 
