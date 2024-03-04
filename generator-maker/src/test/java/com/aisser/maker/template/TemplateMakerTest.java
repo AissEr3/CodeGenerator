@@ -1,6 +1,7 @@
 package com.aisser.maker.template;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.json.JSONUtil;
 import com.aisser.maker.meta.Meta;
 import com.aisser.maker.template.enums.FileFilterRangeEnum;
@@ -112,6 +113,15 @@ public class TemplateMakerTest {
     public void testMakeTemplateByJsonFile(){
         String templateMakerJsonPath = "templateMaker.json";
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(FileUtil.readUtf8String(templateMakerJsonPath), TemplateMakerConfig.class);
+        Long id = TemplateMaker.makeTemplate(templateMakerConfig);
+        System.out.println(id);
+    }
+
+    @Test
+    public void makeSpringBootTemplate(){
+        String rootPath = "examples/springboot-init/";
+        String configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker.json");
+        TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(configStr,TemplateMakerConfig.class);
         Long id = TemplateMaker.makeTemplate(templateMakerConfig);
         System.out.println(id);
     }
