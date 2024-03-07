@@ -2,6 +2,9 @@ package com.aisser.web.common;
 
 /**
  * 自定义错误码
+ *
+ * @author AissEr
+
  */
 public enum ErrorCode {
 

@@ -1,8 +1,8 @@
 {
-    "name": "springboot-init-generator",
+    "name": "generator-web-backend-generator",
     "description": "Spring Boot 模板项目生成器",
     "fileConfig": {
-        "sourceRootPath": "C:/D_commonFiles/java_project/CodeGenerator/generator-maker/.temp/1/springboot-init",
+        "sourceRootPath": "C:/D_commonFiles/java_project/CodeGenerator/generator-maker/.temp/1/generator-web-backend",
         "files": [
             {
                 "type": "group",
@@ -274,7 +274,7 @@
                         "fieldName": "description",
                         "type": "String",
                         "description": "接口文档描述",
-                        "defaultValue": "springboot-init"
+                        "defaultValue": "generator-web-backend"
                     },
                     {
                         "fieldName": "title",

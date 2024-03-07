@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- @author AissEr -->
+<!--  -->
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aisser.springbootinit.mapper.UserMapper">
+<mapper namespace="com.aisser.web.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="com.aisser.web.model.entity.User">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="userName" column="userName" jdbcType="VARCHAR"/>

@@ -5,6 +5,9 @@ import lombok.Data;
 
 /**
  * 用户登录请求
+ *
+ * @author AissEr
+
  */
 @Data
 public class UserLoginRequest implements Serializable {

@@ -1,25 +1,46 @@
 package com.aisser.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.aisser.web.annotation.AuthCheck;
 import com.aisser.web.common.BaseResponse;
 import com.aisser.web.common.DeleteRequest;
 import com.aisser.web.common.ErrorCode;
 import com.aisser.web.common.ResultUtils;
+import com.aisser.web.constant.UserConstant;
 import com.aisser.web.exception.BusinessException;
 import com.aisser.web.exception.ThrowUtils;
-import com.aisser.web.model.dto.user.*;
+import com.aisser.web.model.dto.user.UserAddRequest;
+import com.aisser.web.model.dto.user.UserLoginRequest;
+import com.aisser.web.model.dto.user.UserQueryRequest;
+import com.aisser.web.model.dto.user.UserRegisterRequest;
+import com.aisser.web.model.dto.user.UserUpdateMyRequest;
+import com.aisser.web.model.dto.user.UserUpdateRequest;
 import com.aisser.web.model.entity.User;
+import com.aisser.web.model.vo.LoginUserVO;
+import com.aisser.web.model.vo.UserVO;
 import com.aisser.web.service.UserService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import static com.aisser.web.service.impl.UserServiceImpl.SALT;
+
 /**
  * 用户接口
+ *
+ * @author AissEr
+
  */
 @RestController
 @RequestMapping("/user")
@@ -60,7 +81,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
+    public BaseResponse<LoginUserVO> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (userLoginRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -69,8 +90,8 @@ public class UserController {
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = userService.userLogin(userAccount, userPassword, request);
-        return ResultUtils.success(user);
+        LoginUserVO loginUserVO = userService.userLogin(userAccount, userPassword, request);
+        return ResultUtils.success(loginUserVO);
     }
 
     /**
@@ -95,9 +116,9 @@ public class UserController {
      * @return
      */
     @GetMapping("/get/login")
-    public BaseResponse<User> getLoginUser(HttpServletRequest request) {
+    public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
-        return ResultUtils.success(user);
+        return ResultUtils.success(userService.getLoginUserVO(user));
     }
 
     // endregion
@@ -112,13 +133,17 @@ public class UserController {
      * @return
      */
     @PostMapping("/add")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest, HttpServletRequest request) {
         if (userAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        ThrowUtils.throwIf(!userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         User user = new User();
         BeanUtils.copyProperties(userAddRequest, user);
+        // 默认密码 12345678
+        String defaultPassword = "12345678";
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + defaultPassword).getBytes());
+        user.setUserPassword(encryptPassword);
         boolean result = userService.save(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(user.getId());
@@ -132,11 +157,11 @@ public class UserController {
      * @return
      */
     @PostMapping("/delete")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        ThrowUtils.throwIf(!userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         boolean b = userService.removeById(deleteRequest.getId());
         return ResultUtils.success(b);
     }
@@ -149,12 +174,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/update")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest,
             HttpServletRequest request) {
         if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        ThrowUtils.throwIf(!userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         User user = new User();
         BeanUtils.copyProperties(userUpdateRequest, user);
         boolean result = userService.updateById(user);
@@ -163,13 +188,15 @@ public class UserController {
     }
 
     /**
-     * 根据 id 获取用户
+     * 根据 id 获取用户（仅管理员）
      *
      * @param id
+     * @param request
      * @return
      */
     @GetMapping("/get")
-    public BaseResponse<User> getUserById(long id) {
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<User> getUserById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -179,13 +206,30 @@ public class UserController {
     }
 
     /**
-     * 分页获取用户列表
+     * 根据 id 获取包装类
+     *
+     * @param id
+     * @param request
+     * @return
+     */
+    @GetMapping("/get/vo")
+    public BaseResponse<UserVO> getUserVOById(long id, HttpServletRequest request) {
+        BaseResponse<User> response = getUserById(id, request);
+        User user = response.getData();
+        return ResultUtils.success(userService.getUserVO(user));
+    }
+
+    /**
+     * 分页获取用户列表（仅管理员）
      *
      * @param userQueryRequest
+     * @param request
      * @return
      */
     @PostMapping("/list/page")
-    public BaseResponse<Page<User>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest) {
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Page<User>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest,
+            HttpServletRequest request) {
         long current = userQueryRequest.getCurrent();
         long size = userQueryRequest.getPageSize();
         Page<User> userPage = userService.page(new Page<>(current, size),
@@ -193,6 +237,52 @@ public class UserController {
         return ResultUtils.success(userPage);
     }
 
+    /**
+     * 分页获取用户封装列表
+     *
+     * @param userQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/page/vo")
+    public BaseResponse<Page<UserVO>> listUserVOByPage(@RequestBody UserQueryRequest userQueryRequest,
+            HttpServletRequest request) {
+        if (userQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long current = userQueryRequest.getCurrent();
+        long size = userQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        Page<User> userPage = userService.page(new Page<>(current, size),
+                userService.getQueryWrapper(userQueryRequest));
+        Page<UserVO> userVOPage = new Page<>(current, size, userPage.getTotal());
+        List<UserVO> userVO = userService.getUserVO(userPage.getRecords());
+        userVOPage.setRecords(userVO);
+        return ResultUtils.success(userVOPage);
+    }
 
     // endregion
+
+    /**
+     * 更新个人信息
+     *
+     * @param userUpdateMyRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/update/my")
+    public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest,
+            HttpServletRequest request) {
+        if (userUpdateMyRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateMyRequest, user);
+        user.setId(loginUser.getId());
+        boolean result = userService.updateById(user);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        return ResultUtils.success(true);
+    }
 }

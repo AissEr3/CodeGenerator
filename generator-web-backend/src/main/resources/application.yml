@@ -1,7 +1,8 @@
 # 公共配置文件
+# @author AissEr
 spring:
   application:
-    name: springboot-init
+    name: generator-web-backend
   # 默认 dev 环境
   profiles:
     active: dev
@@ -19,8 +20,8 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my_db
-    username: root
+    url: jdbc:mysql://localhost:3306/generator
+    username: Aisser
     password: 123456
   # Redis 配置
   # todo 需替换配置，然后取消注释
@@ -36,9 +37,14 @@ spring:
 #    uris: http://localhost:9200
 #    username: root
 #    password: 123456
+  # 文件上传
+  servlet:
+    multipart:
+      # 大小限制
+      max-file-size: 10MB
 server:
   address: 0.0.0.0
-  port: 8101
+  port: 8120
   servlet:
     context-path: /api
     # cookie 30 天过期
@@ -54,3 +60,41 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除值（默认为 1）
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+# 微信相关
+wx:
+  # 微信公众平台
+  mp:
+    token: xxx
+    aesKey: xxx
+    appId: xxx
+    secret: xxx
+    config-storage:
+      http-client-type: HttpClient
+      key-prefix: wx
+      redis:
+        host: 127.0.0.1
+        port: 6379
+      type: Memory
+  # 微信开放平台
+  open:
+    appId: xxx
+    appSecret: xxx
+# 对象存储
+# todo 需替换配置
+cos:
+  client:
+    accessKey: xxx
+    secretKey: xxx
+    region: xxx
+    bucket: xxx
+# 接口文档配置
+knife4j:
+  enable: true
+  openapi:
+    title: "接口文档"
+    version: 1.0
+    group:
+      default:
+        api-rule: package
+        api-rule-resources:
+          - com.aisser.web.controller

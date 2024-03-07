@@ -11,6 +11,9 @@ import lombok.Data;
 
 /**
  * 帖子
+ *
+ * @author AissEr
+
  */
 @TableName(value = "post")
 @Data
@@ -36,6 +39,16 @@ public class Post implements Serializable {
      * 标签列表 json
      */
     private String tags;
+
+    /**
+     * 点赞数
+     */
+    private Integer thumbNum;
+
+    /**
+     * 收藏数
+     */
+    private Integer favourNum;
 
     /**
      * 创建用户 id
